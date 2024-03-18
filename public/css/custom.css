@@ -1,0 +1,102 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body{
+    overflow-x: hidden !important;
+}
+
+.fullWidth{
+    width: 100%;
+}
+
+
+.bodyPersonalizado{
+    background-color: #afafaf8c !important;
+}
+
+.bodyPersonalizadoPuntuacion{
+    background-color: white !important;
+}
+
+.qr-class{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.centered-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}  
+
+.card-puntuacion{
+    text-align: center;
+}
+
+.card-puntuacion .el-rate__icon{
+    font-size: 35px;
+}
+
+.grupo-check{
+    text-align: center;
+}
+
+.grupo-check .el-checkbox__label{
+    font-size: 18px !important;
+}
+
+.card-personalizada{
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 2.25rem;
+}
+
+.alinearDerecha{
+    text-align: end;
+}
+
+.editBoton{
+    margin: 5px;
+}
+
+.contenedorMenu{
+    margin-top: 10px;
+}
+
+.p-3 {
+    padding: 10px !important;
+}
+
+.editPropio{
+    margin: 2px;
+}
+
+.editDescripcion{
+    word-break:break-all; 
+    display:flex; 
+    justify-content: space-between;
+}
+
+.carcasaMenuDia{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.editPropio .el-card__header {
+    padding: 2px 20px !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+.seleccionado{
+    background-color: #67C23A !important; 
+    transition: background-color 0.3s ease;
+
+}
