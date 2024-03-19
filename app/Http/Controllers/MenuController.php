@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\colaborador;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use App\Models\menu;
 use App\Models\menu_dia;
 use App\Models\postre;

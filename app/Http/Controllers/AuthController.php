@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\permisos;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -21,7 +22,6 @@ class AuthController extends Controller
 
         Auth::logout();
 
-        $redirect_to=Session::get('redirect_to');
         /*Elimino las sesiones de PHP*/
         Session::flush();
 
@@ -64,7 +64,7 @@ class AuthController extends Controller
                 Session::put(['nameUser'=>$query->rol]);
             }
             
-            return redirect()->intended('dashboard')
+            return redirect()->intended('home')
                         ->withSuccess('Signed in');
 
 
@@ -91,7 +91,7 @@ class AuthController extends Controller
         $data = $request->all();
         $check = $this->create($data);
          
-        return redirect("dashboard")->withSuccess('You have signed-in');
+        return redirect("home")->withSuccess('You have signed-in');
     }
 
 
@@ -104,8 +104,9 @@ class AuthController extends Controller
       ]);
     }
 
-    public function dashboard()
+    public function home()
     {
+        // dd('entro en home');
         if(Auth::check()){
             return view('home');
         }

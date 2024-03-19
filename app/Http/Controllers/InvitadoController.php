@@ -7,6 +7,7 @@ use App\Models\colaborador;
 use App\Models\menu_dia;
 use App\Models\valoracion_mensual;
 use App\Models\valoracion_semanal;
+use App\Http\Controllers\Controller;
 use DateTime;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class InvitadoController extends Controller
      * @return void
      */
     public function __construct(){
-        $this->middleware('guest');
+        $this->middleware('guest')->except('index', 'puntuacion', 'loginInvitado', 'getMenu');
     }
 
     /**

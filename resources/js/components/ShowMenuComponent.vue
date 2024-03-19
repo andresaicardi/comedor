@@ -239,6 +239,7 @@
             },
 
             getMenu(dia){
+                let loadingInstance = Loading.service();
                 this.form.id='';
                 this.form.menu1='';
                 this.form.menu2='';

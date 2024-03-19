@@ -1,5 +1,4 @@
 <?php
-// use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -13,56 +12,54 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    if (session()->exists('userLogin') && session('rol')=='Colaborador') {
-        return view('colaborador');
-    }else if (session()->exists('userLogin')) {
-        return view('home');
+    if (session()->exists('userLogin')) {
+        return redirect("home")->withSuccess('You have signed-in');
     }else{
         return view('auth.login');	
     }
 });
 
-Route::get('/dashboard', 'App\Http\Controllers\AuthController@dashboard');
-Route::post('/login', 'App\Http\Controllers\AuthController@login')->name('login.login');
-Route::get('/signout', 'App\Http\Controllers\AuthController@signOut')->name('signout');
+Route::get('/home', 'AuthController@home')->middleware('checkUserRole');
+Route::post('/login', 'AuthController@login')->name('login.login');
+Route::get('/signout', 'AuthController@signOut')->name('signout')->middleware('checkUserRole');
 
 
-Route::post('/menu/createPostre', 'App\Http\Controllers\MenuController@createPostre')->middleware('checkUserRole');
-Route::post('/menu/desactivarPostre', 'App\Http\Controllers\MenuController@desactivarPostre')->middleware('checkUserRole');
-Route::post('/menu/updateMenu', 'App\Http\Controllers\MenuController@updateMenu')->middleware('checkUserRole');
-Route::post('/menu/createMenu', 'App\Http\Controllers\MenuController@createMenu')->middleware('checkUserRole');
-Route::get('/menu/getMenu/{fecha}', 'App\Http\Controllers\MenuController@getMenu')->middleware('checkUserRole');
-Route::get('/menu/getPostre', 'App\Http\Controllers\MenuController@getPostre')->middleware('checkUserRole');
-Route::get('/menu/showPedido', 'App\Http\Controllers\MenuController@showPedido')->middleware('checkUserRole');
-Route::get('/menu/showPedidosDia', 'App\Http\Controllers\MenuController@showPedidosDia')->middleware('checkUserRole');
-Route::get('/menu/showUserMenu', 'App\Http\Controllers\MenuController@showUserMenu')->middleware('checkUserRole');
-Route::get('/menu/showMenu', 'App\Http\Controllers\MenuController@showMenu')->middleware('checkUserRole');
-Route::get('/menu/getPedidos/{fecha}', 'App\Http\Controllers\MenuController@getPedidos')->middleware('checkUserRole');
-Route::get('/menu/getPedidosDia/{fecha}/{hora}', 'App\Http\Controllers\MenuController@getPedidosDia')->middleware('checkUserRole');
-Route::get('/menu/getPedidoInvitado/{legajo}/{fecha}', 'App\Http\Controllers\MenuController@getPedidoInvitado')->middleware('checkUserRole');
-Route::resource('/menu', 'App\Http\Controllers\MenuController')->middleware('checkUserRole');
+Route::post('/menu/createPostre', 'MenuController@createPostre')->middleware('checkUserRole');
+Route::post('/menu/desactivarPostre', 'MenuController@desactivarPostre')->middleware('checkUserRole');
+Route::post('/menu/updateMenu', 'MenuController@updateMenu')->middleware('checkUserRole');
+Route::post('/menu/createMenu', 'MenuController@createMenu')->middleware('checkUserRole');
+Route::get('/menu/getMenu/{fecha}', 'MenuController@getMenu')->middleware('checkUserRole');
+Route::get('/menu/getPostre', 'MenuController@getPostre')->middleware('checkUserRole');
+Route::get('/menu/showPedido', 'MenuController@showPedido')->middleware('checkUserRole');
+Route::get('/menu/showPedidosDia', 'MenuController@showPedidosDia')->middleware('checkUserRole');
+Route::get('/menu/showUserMenu', 'MenuController@showUserMenu')->middleware('checkUserRole');
+Route::get('/menu/showMenu', 'MenuController@showMenu')->middleware('checkUserRole');
+Route::get('/menu/getPedidos/{fecha}', 'MenuController@getPedidos')->middleware('checkUserRole');
+Route::get('/menu/getPedidosDia/{fecha}/{hora}', 'MenuController@getPedidosDia')->middleware('checkUserRole');
+Route::get('/menu/getPedidoInvitado/{legajo}/{fecha}', 'MenuController@getPedidoInvitado')->middleware('checkUserRole');
+Route::resource('/menu', 'MenuController')->middleware('checkUserRole');
 
 
-Route::get('/colaborador', 'App\Http\Controllers\InvitadoController@index');
-Route::get('/colaborador/puntuacion', 'App\Http\Controllers\InvitadoController@puntuacion');
-Route::get('/colaborador/getValorarMes/{id}', 'App\Http\Controllers\InvitadoController@getValorarMes');
-Route::get('/colaborador/getMenu/{legajo}', 'App\Http\Controllers\InvitadoController@getMenu');
-Route::post('/colaborador/postEnvio', 'App\Http\Controllers\InvitadoController@postEnvio');
-Route::post('/colaborador/postMensual', 'App\Http\Controllers\InvitadoController@postMensual');
-Route::post('/colaborador/loginInvitado', 'App\Http\Controllers\InvitadoController@loginInvitado');
-Route::post('/colaborador/postPuntuacion', 'App\Http\Controllers\InvitadoController@postPuntuacion');
-Route::resource('/colaborador', 'App\Http\Controllers\InvitadoController');
+Route::get('/colaborador', 'InvitadoController@index')->name('colaborador');;
+Route::get('/colaborador/puntuacion', 'InvitadoController@puntuacion');
+Route::get('/colaborador/getValorarMes/{id}', 'InvitadoController@getValorarMes');
+Route::get('/colaborador/getMenu/{legajo}', 'InvitadoController@getMenu');
+Route::post('/colaborador/postEnvio', 'InvitadoController@postEnvio');
+Route::post('/colaborador/postMensual', 'InvitadoController@postMensual');
+Route::post('/colaborador/loginInvitado', 'InvitadoController@loginInvitado');
+Route::post('/colaborador/postPuntuacion', 'InvitadoController@postPuntuacion');
+Route::resource('/colaborador', 'InvitadoController');
 
-Route::get('/rrhh/getDatosMesColaboradores/{mes}', 'App\Http\Controllers\RrhhController@getDatosMesColaboradores')->middleware('checkUserRole');
-Route::get('/rrhh/generarQr/{qr}/{nombreCompleto}', 'App\Http\Controllers\RrhhController@generarQr')->middleware('checkUserRole');
-Route::get('/rrhh/crearColaborador', 'App\Http\Controllers\RrhhController@crearColaborador')->middleware('checkUserRole');
-Route::get('/rrhh/mesColaborador', 'App\Http\Controllers\RrhhController@mesColaborador')->middleware('checkUserRole'); 
-Route::get('/rrhh/editarColaborador', 'App\Http\Controllers\RrhhController@editarColaborador')->middleware('checkUserRole');
-Route::get('/rrhh/showPuntuacion', 'App\Http\Controllers\RrhhController@showPuntuacion')->middleware('checkUserRole');
-Route::get('/rrhh/showPuntuacionMensual', 'App\Http\Controllers\RrhhController@showPuntuacionMensual')->middleware('checkUserRole');
-Route::get('/rrhh/getPuntuacion/{fecha}', 'App\Http\Controllers\RrhhController@getPuntuacion')->middleware('checkUserRole');
-Route::get('/rrhh/getPuntuacionMensual/{mes}', 'App\Http\Controllers\RrhhController@getPuntuacionMensual')->middleware('checkUserRole');
-Route::get('/rrhh/getColaborador/{legajo}', 'App\Http\Controllers\RrhhController@getColaborador')->middleware('checkUserRole');
-Route::post('/rrhh/postCrearColaborador', 'App\Http\Controllers\RrhhController@postCrearColaborador')->middleware('checkUserRole');
-Route::post('/rrhh/postUpdatedColaborador', 'App\Http\Controllers\RrhhController@postUpdatedColaborador')->middleware('checkUserRole');
+Route::get('/rrhh/getDatosMesColaboradores/{mes}', 'RrhhController@getDatosMesColaboradores')->middleware('checkUserRole');
+Route::get('/rrhh/generarQr/{qr}/{nombreCompleto}', 'RrhhController@generarQr')->middleware('checkUserRole');
+Route::get('/rrhh/crearColaborador', 'RrhhController@crearColaborador')->middleware('checkUserRole');
+Route::get('/rrhh/mesColaborador', 'RrhhController@mesColaborador')->middleware('checkUserRole'); 
+Route::get('/rrhh/editarColaborador', 'RrhhController@editarColaborador')->middleware('checkUserRole');
+Route::get('/rrhh/showPuntuacion', 'RrhhController@showPuntuacion')->middleware('checkUserRole');
+Route::get('/rrhh/showPuntuacionMensual', 'RrhhController@showPuntuacionMensual')->middleware('checkUserRole');
+Route::get('/rrhh/getPuntuacion/{fecha}', 'RrhhController@getPuntuacion')->middleware('checkUserRole');
+Route::get('/rrhh/getPuntuacionMensual/{mes}', 'RrhhController@getPuntuacionMensual')->middleware('checkUserRole');
+Route::get('/rrhh/getColaborador/{legajo}', 'RrhhController@getColaborador')->middleware('checkUserRole');
+Route::post('/rrhh/postCrearColaborador', 'RrhhController@postCrearColaborador')->middleware('checkUserRole');
+Route::post('/rrhh/postUpdatedColaborador', 'RrhhController@postUpdatedColaborador')->middleware('checkUserRole');
 Route::resource('/rrhh', 'RrhhController')->middleware('checkUserRole');
