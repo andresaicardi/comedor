@@ -29,14 +29,11 @@ class AuthController extends Controller
             'email' => 'required',
             'password' => 'required',
         ]);
-   
-    
+
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             
-            
             $clientes = Auth::user();
-            // dd($clientes);
 
             $query=permisos::where('permisos.user_id',$clientes->id)
                     ->join('rol', 'permisos.rol_id', '=', 'rol.id')
@@ -57,7 +54,6 @@ class AuthController extends Controller
             Session::put(['rol'=>$query->rol]);
             Session::put(['id'=>$clientes->id]);
 
-
             if($query->rol!='Colaborador'){
                 Session::put(['nameUser'=>$nombre]);
             }else{
@@ -69,8 +65,9 @@ class AuthController extends Controller
 
 
         }
+
         $validator['emailPassword'] = 'Email address or password is incorrect.';
-        return redirect("login")->withErrors($validator);
+        return redirect('/')->withErrors($validator);
     }
 
 
