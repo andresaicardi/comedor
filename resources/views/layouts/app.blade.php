@@ -52,7 +52,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     
     <!-- Brand Logo -->
-    <a href="/home" class="brand-link">
+    <a href="/" class="brand-link">
       <span class="brand-text font-weight-light">Somil S.A. - 
         @if(session()->exists('nameUser') && session('rol')!='Comedor')
           {{session('nameUser')}}
