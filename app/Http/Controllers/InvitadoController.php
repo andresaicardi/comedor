@@ -22,7 +22,7 @@ class InvitadoController extends Controller
      * @return void
      */
     public function __construct(){
-        $this->middleware('guest')->except('index', 'puntuacion', 'loginInvitado', 'getMenu');
+        $this->middleware('guest')->except('index', 'puntuacion', 'loginInvitado', 'getMenu', 'getValorarMes', 'postEnvio', 'postPuntuacion', 'postMensual');
     }
 
     /**

@@ -115,8 +115,10 @@ export default {
         },
 
         getValorarMes(id_colaborador){
+            
             axios.get('/colaborador/getValorarMes/'+id_colaborador)
             .then(response =>{
+                console.log(response)
                 if(response.data.message=='Realizar puntuacion mensual!'){
                     this.$message({
                         showClose: true,
@@ -169,6 +171,7 @@ export default {
                     });
                 }
             }
+            
             
             let form = this.formLogin;
             axios.post('/colaborador/loginInvitado', form)

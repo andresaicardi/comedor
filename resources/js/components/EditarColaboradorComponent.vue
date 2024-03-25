@@ -37,11 +37,6 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="legajo">
-                            <el-input v-model="form.legajo"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                         <el-form-item label="Hora">
                             <el-select style="width: 100%;" v-model="form.hora" placeholder="Selecciona un horario">
                                     <el-option
@@ -59,6 +54,7 @@
                     <el-col :span="8">
                         <el-button type="success" @click="updatedColaborador('form')">Editar</el-button>
                         <el-button type="primary" @click="generarQr()">Ver QR</el-button>
+                        <el-button type="danger" @click="recargar()">Cancelar</el-button>
                     </el-col>
                 </el-row>
             
@@ -108,6 +104,11 @@
             
         },
         methods: {
+
+            recargar(){
+                window.location.reload();
+            },
+
             getColaborador(legajo){
                 let loadingInstance = Loading.service();
                 axios.get('/rrhh/getColaborador/'+legajo)
