@@ -50,14 +50,14 @@
                     label="Cantidad"
                     width="180">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     label="Pan"
                     width="180">
                     <template slot-scope="scope">
                         <span v-if="scope.row.pan===1">Si</span>
                         <span v-else>No</span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     prop="postre"
                     label="Postre"
@@ -66,6 +66,10 @@
                 <el-table-column
                     prop="menu"
                     label="Menu">
+                </el-table-column>
+                <el-table-column
+                    prop="colaborador"
+                    label="Colaboradores">
                 </el-table-column>
             </el-table>
         </el-row>

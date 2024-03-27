@@ -279,13 +279,15 @@ class MenuController extends Controller
     public function getPedidosDia($fecha,$hora){
         
 
-        $menus=DB::select("SELECT m.menu_description AS menu, cm.pan, p.postre_description AS postre, cm.hora, COUNT(*) AS cantidad 
-        FROM colab_menu cm
-        INNER JOIN menu m ON cm.id_menu=m.id_menu
-        INNER JOIN postre p ON cm.id_postre=p.id_postre
-        WHERE cm.fecha='$fecha' and cm.hora='$hora'
-        GROUP BY m.menu_description,p.postre_description,cm.hora, cm.pan
-        ORDER BY cm.hora asc");
+        $menus=DB::select("SELECT m.menu_description AS menu, p.postre_description AS postre, cm.hora, COUNT(*) AS cantidad,
+        GROUP_CONCAT(CONCAT(c.nombre, ' ', c.apellido) SEPARATOR ', ') AS colaborador
+                FROM colab_menu cm
+                INNER JOIN colaborador c ON cm.id_colab=c.id_colaborador
+                INNER JOIN menu m ON cm.id_menu=m.id_menu
+                INNER JOIN postre p ON cm.id_postre=p.id_postre
+                WHERE cm.fecha='$fecha' and cm.hora='$hora'
+                GROUP BY m.menu_description,p.postre_description,cm.hora
+                ORDER BY cm.hora asc");
 
         if(count($menus)==0){
             return response()->json([
