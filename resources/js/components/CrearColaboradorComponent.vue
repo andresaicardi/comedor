@@ -63,6 +63,7 @@ export default {
 
             horarios: [             
                 { value: '11:10', label: '11:10' },
+                { value: '11:50', label: '11:30' },
                 { value: '11:50', label: '11:50' },
                 { value: '12:10', label: '12:10' },
                 { value: '12:30', label: '12:30' },
