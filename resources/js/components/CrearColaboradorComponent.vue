@@ -75,7 +75,7 @@ export default {
                 cedula:[{required: true, message: 'La cedula es requerida', trigger: 'blur'}],
                 nombre:[{required: true, message: 'El nombre es requerido', trigger: 'blur'}],
                 apellido:[{required: true, message: 'El apellido es requerido', trigger: 'blur'}],
-                apellido:[{required: true, message: 'La hora es requerido', trigger: 'blur'}],
+                hora:[{required: true, message: 'La hora es requerido', trigger: 'blur'}],
             }
         };
     },
