@@ -45,6 +45,9 @@
         
     </div>
 </template>
+sudo systemctl stop nginx
+sudo /opt/lampp/lampp restart
+
 
 
 <script>
