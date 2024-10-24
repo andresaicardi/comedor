@@ -5,7 +5,6 @@
             <div class="centered-container">
                 <div class="contenedor-camara">
                 <StreamBarcodeReader
-                    :constraints="cameraConstraints"
                     @decode="login"
                     @loaded="onLoaded"
                 ></StreamBarcodeReader>
@@ -124,108 +123,101 @@
 
 <script>
 import { StreamBarcodeReader } from "vue-barcode-reader";
-
 export default {
     components: {
         StreamBarcodeReader,
     },
     data() {
         return {
-            dialogVisible: true,
-            ocultar: false,
-            dialogPuntuacion: false,
-            botonesMenu: false,
-            scannerActive: true,
-            allMenu: [],
+            dialogVisible:true,
+            ocultar:false,
+            dialogPuntuacion:false,
+            botonesMenu:false,
+            scannerActive:true,
+            allMenu:[],
             selectedAusentismo: {},
             wantPanByDay: {},
-            cameraConstraints: { video: { facingMode: 'user' } },  // Forzamos el uso de la cámara frontal
 
-            formLogin: {
-                qr: '',
+            formLogin:{
+                qr:'',
             },
 
-            form: {
-                legajo: '',
-                password: '',
+            form:{
+                legajo:'',
+                password:'',
                 selectedMenus: {}, 
                 selectedPostres: {},
-                selectedPan: {},
-                selectedAusentismo: {}
+                selectedPan:{},
+                selectedAusentismo:{}
             },
+
         };
     },
-    mounted() {
-        this.setCameraConstraints();
+    created(){
+    },
+    mounted(){
     },
     methods: {
-        setCameraConstraints() {
-            // Configuramos las restricciones para forzar el uso de la cámara frontal
-            this.cameraConstraints = { 
-                video: { 
-                    facingMode: 'user'  // Intentamos usar la cámara frontal
-                } 
-            };
-        },
+        
         onLoaded() {
-            console.log('Cámara lista para escanear códigos de barra.');
+            console.log(`Ready to start scanning barcodes`)
         },
 
-        async login(value) {
-            this.formLogin.qr = value;
-            this.scannerActive = false;
+        async login(value){
+            this.formLogin.qr=value;
+            this.scannerActive=false;
 
-            if (this.formLogin.qr === 'SOMIL') {
-                const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                let form = {
-                    csrf: csrf
-                };
+            if(this.formLogin.qr=='SOMIL'){
+                const csrf= document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                let form= {
+                    csrf:csrf
+                }
                 const response = await axios.post('/login/logout', form);
                 if (response.status === 200) {
                     window.location.href = '/';
                 } else {
                     this.$message({
                         showClose: true,
-                        message: 'Hubo un error al cerrar sesión',
+                        message: 'Hubo un error a la hora de cerrar session',
                         type: 'error'
                     });
                 }
             }
-
+            
             let form = this.formLogin;
             axios.post('/colaborador/loginInvitado', form)
             .then(response => {
-                if (response.data.message === 'Bienvenido al Menú semana!') {
+                if(response.data.message=='Bienvenido al Menú semana!'){
                     this.$message({
                         showClose: true,
                         message: 'Bienvenido al Menú semana!',
                         type: 'success'
                     });
-                    const login = response.data.login;
+                    const login =response.data.login;
                     this.getMenu(login.legajo);
-                    this.dialogVisible = false;
-                    this.form.legajo = login.legajo;
-                    this.form.password = login.password;
-                    this.formLogin.qr = '';
+                    this.dialogVisible=false;
+                    this.form.legajo=login.legajo;
+                    this.form.password=login.password;
+                    this.formLogin.qr='';
 
-                } else if (response.data.message === 'No se encontró el usuario, el legajo no existe o no se encuentra') {
+                }else if(response.data.message=='No se encontro el usuario, el legajo no existe o no se encuentra'){
                     this.$message({
                         showClose: true,
-                        message: 'No se encontró el usuario, el legajo no existe o no se encuentra',
+                        message: 'No se encontro el usuario, el legajo no existe o no se encuentra',
                         type: 'error'
                     });
                     window.location.reload();
-                } else if (response.data.message === 'La contraseña no es correcta') {
+                }else if(response.data.message=='La contraseña no es correcta'){
                     this.$message({
                         showClose: true,
                         message: 'La contraseña no es correcta',
                         type: 'error'
                     });
                     window.location.reload();
-                } else {
+                }else{
                     this.$message({
                         showClose: true,
-                        message: 'Ocurrió un inconveniente. Contactar con Sistemas',
+                        message: 'Ocurrio un inconveniente. Contactar con Sistemas',
                         type: 'error'
                     });
                     window.location.reload();
@@ -240,46 +232,53 @@ export default {
             });
         },
 
-        getMenu(legajo) {
-            axios.get('/colaborador/getMenu/' + legajo)
+        getMenu(legajo){
+            axios.get('/colaborador/getMenu/'+legajo)
             .then(response => {
-                if (response.data.message === 'Ya se realizó el pedido!') {
+                if(response.data.message=='Ya se relizo el pedido!'){
                     this.$message({
                         showClose: true,
-                        message: 'Ya se realizó el pedido!',
+                        message: 'Ya se relizo el pedido!',
                         type: 'warning'
                     });
-                    this.$alert('Ya se realizó el pedido!', {
-                        type: 'warning',
-                    }).then(response => {
+                    this.$alert('Ya se relizo el pedido!', {
+                                    // confirmButtonText: 'Aceptar',
+                                    type: 'warning',})
+                    .then(response=>{
                         window.location.reload();
-                    });
-                } else if (response.data.message === 'El periodo de elegir el Menú está cerrado') {
+                    })
+                }
+                else if(response.data.message=='El periodo de elegir el Menu esta cerrado'){
                     this.$message({
                         showClose: true,
-                        message: 'El periodo de elegir el Menú está cerrado',
+                        message: 'El periodo de elegir el Menu esta cerrado',
                         type: 'error'
                     });
-                    this.$alert('El periodo de elegir el Menú está cerrado', {
-                        type: 'danger',
-                    }).then(response => {
+                    this.$alert('El periodo de elegir el Menu esta cerrado', {
+                                    // confirmButtonText: 'Aceptar',
+                                    type: 'danger',})
+                    .then(response=>{
                         window.location.reload();
-                    });
-                } else if (response.data.length === 0) {
+                    })
+                }
+                else if(response.data.length==0){   
                     this.$message({
                         showClose: true,
                         message: 'Menú no disponible',
                         type: 'error'
                     });
                     this.$alert('Menú no disponible', {
-                        type: 'danger',
-                    }).then(response => {
+                                    // confirmButtonText: 'Aceptar',
+                                    type: 'danger',})
+                    .then(response=>{
                         window.location.reload();
-                    });
-                } else {
-                    this.allMenu = response.data;
-                    this.botonesMenu = true;
+                    })
                 }
+                else{
+                    this.allMenu=response.data;
+                    this.botonesMenu=true;
+                }
+                
             });
         },
 
@@ -339,7 +338,7 @@ export default {
             if(this.form.legajo==null || this.form.legajo==''){
                 this.$message({
                     showClose: true,
-                    message: 'Ocurrió un error, el legajo no fue ingresado',
+                    message: 'Ocurrio un error, el legajo no fue ingresado',
                     type: 'error'
                 });
                 return false;
@@ -348,7 +347,7 @@ export default {
             if(this.form.password==null || this.form.password==''){
                 this.$message({
                     showClose: true,
-                    message: 'Ocurrió un error, la password no fue ingresada',
+                    message: 'Ocurrio un error, la password no fue ingresada',
                     type: 'error'
                 });
                 return false;
@@ -357,7 +356,7 @@ export default {
             if(Object.keys(this.form.selectedMenus).length<1){
                 this.$message({
                     showClose: true,
-                    message: 'Debe seleccionar un Menú para cada día!',
+                    message: 'Debe seleccionar un Menu para cada dia!',
                     type: 'error'
                 });
                 return false;
@@ -366,7 +365,7 @@ export default {
             if(Object.keys(this.form.selectedPostres).length<1){
                 this.$message({
                     showClose: true,
-                    message: 'Debe seleccionar un Postre para cada día!',
+                    message: 'Debe seleccionar un Postre para cada dia!',
                     type: 'error'
                 });
                 return false;
@@ -374,10 +373,10 @@ export default {
 
             axios.post('/colaborador/postEnvio', this.form)
             .then(response => {
-                if(response.data.message=='Se ha realizado el pedido con éxito!'){
+                if(response.data.message=='Se a realizado el pedido con exito!'){
                     this.$message({
                         showClose: true,
-                        message: 'Se ha realizado el pedido con éxito!',
+                        message: 'Se a realizado el pedido con exito!',
                         type: 'success'
                     });
                     window.location.reload();
@@ -385,7 +384,7 @@ export default {
                 }else{
                     this.$message({
                         showClose: true,
-                        message: 'Ocurrió un inconveniente. Contactar con Sistemas',
+                        message: 'Ocurrio un inconveniente. Contactar con Sistemas',
                         type: 'error'
                     });
                 }
