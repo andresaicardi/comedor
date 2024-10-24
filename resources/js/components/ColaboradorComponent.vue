@@ -33,7 +33,7 @@ export default {
             allMenu: [],
             selectedAusentismo: {},
             wantPanByDay: {},
-            cameraConstraints: { video: true },  // Añadimos esta propiedad
+            cameraConstraints: { video: { facingMode: 'user' } },  // Forzamos el uso de la cámara frontal
 
             formLogin: {
                 qr: '',
@@ -51,29 +51,16 @@ export default {
         };
     },
     mounted() {
-        this.setFrontCamera();
+        this.setCameraConstraints();
     },
     methods: {
-        setFrontCamera() {
-            navigator.mediaDevices.enumerateDevices().then(devices => {
-                const videoInputDevices = devices.filter(device => device.kind === 'videoinput');
-                const frontCamera = videoInputDevices.find(device => device.label.toLowerCase().includes('front') || device.label.toLowerCase().includes('user'));
-
-                if (frontCamera) {
-                    this.cameraConstraints = {
-                        video: {
-                            deviceId: frontCamera.deviceId
-                        }
-                    };
-                } else {
-                    this.cameraConstraints = {
-                        video: true // Fallback a la cámara predeterminada
-                    };
-                }
-            }).catch(error => {
-                console.error("Error al obtener dispositivos de video: ", error);
-                this.cameraConstraints = { video: true };
-            });
+        setCameraConstraints() {
+            // Configuramos las restricciones para forzar el uso de la cámara frontal
+            this.cameraConstraints = { 
+                video: { 
+                    facingMode: { exact: 'user' }  // Aquí intentamos forzar la cámara frontal
+                } 
+            };
         },
         onLoaded() {
             console.log(`Ready to start scanning barcodes`);
