@@ -49,7 +49,10 @@ export default {
             allMenu: [],
             selectedAusentismo: {},
             wantPanByDay: {},
-            cameraConstraints: { video: true },  // Constraints para la cámara (actualizaremos esto después)
+            //cameraConstraints: { video: true },  // Constraints para la cámara (actualizaremos esto después)
+            video: {
+                facingMode: { exact: "user" } // "user" es la cámara frontal, "environment" es la trasera
+            }
 
             formLogin: {
                 qr: '',
